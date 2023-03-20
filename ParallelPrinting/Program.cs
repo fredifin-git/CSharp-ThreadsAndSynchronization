@@ -6,5 +6,7 @@ Console.WriteLine("Hello, World!");
 //Solution.Assignment2("Hello!");
 //Solution.Assignment3Part1("Hello!");
 //Console.WriteLine();
-Solution.Assignment3Part2("Hello!");
+//Solution.Assignment3Part2("Hello!");
+//Console.WriteLine();
+Solution.Assignment4Part1();
 Console.ReadLine();

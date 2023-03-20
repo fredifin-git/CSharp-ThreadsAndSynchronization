@@ -57,14 +57,23 @@ public class Solution
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback((str) => { Console.WriteLine(str); }), str);
         }
-        //ThreadPool.QueueUserWorkItem(new WaitCallback((str) => { Console.WriteLine(str); }), str);
     }
 
     public static void Assignment4Part1()
     {
-        /*
-        * Write code here
-        */
+        ThreadStart threadStart = () =>
+        {
+            for (int i = 1; i < 101; i++)
+            {
+                Console.WriteLine(i);
+            }
+
+            Thread.Sleep(2000);
+        };
+        Thread thread = new Thread(threadStart);
+        thread.Start();
+        thread.Join();
+        Console.WriteLine("Thread ended ");
     }
 
     public static void Assignment4Part2()
