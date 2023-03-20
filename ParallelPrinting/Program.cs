@@ -8,5 +8,7 @@ Console.WriteLine("Hello, World!");
 //Console.WriteLine();
 //Solution.Assignment3Part2("Hello!");
 //Console.WriteLine();
-Solution.Assignment4Part1();
+//Solution.Assignment4Part1();
+//Console.WriteLine();
+Solution.Assignment4Part2();
 Console.ReadLine();

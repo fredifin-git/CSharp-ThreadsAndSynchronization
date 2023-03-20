@@ -70,6 +70,7 @@ public class Solution
 
             Thread.Sleep(2000);
         };
+        
         Thread thread = new Thread(threadStart);
         thread.Start();
         thread.Join();
@@ -78,8 +79,20 @@ public class Solution
 
     public static void Assignment4Part2()
     {
-        /*
-        * Write code here
-        */
+        object _lock = new object();
+        
+        ThreadStart threadStart = () =>
+        {
+            lock (_lock)
+            { 
+                Helper.Foo();
+            }
+        };
+        Thread thread1 = new Thread(threadStart);
+        Thread thread2 = new Thread(threadStart);
+        thread1.Start();
+        thread2.Start();
+        thread1.Join();
+        thread2.Join();
     }
 }
