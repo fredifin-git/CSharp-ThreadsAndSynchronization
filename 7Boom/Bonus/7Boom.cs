@@ -4,6 +4,6 @@ namespace Bonus
 {
     public class SevenBoomBonus
     {
-
+        
     }
 }

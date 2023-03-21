@@ -1,58 +1,66 @@
 ﻿using System;
+using System.Threading;
 
 namespace Basic
 {
     public class SevenBoom
     {
-        //static int variable = 0;
         static Pocket pocket = new Pocket();
         static readonly object lockObj = new object();
+        private const int maxThreadNum = 4;
         public static void SevenBoomFourThreads()
         {
-            Thread thread1 = new Thread(SBoom);
-            Thread thread2 = new Thread(SBoom);
-            Thread thread3 = new Thread(SBoom);
-            Thread thread4 = new Thread(SBoom);
+            Thread[] threads = new Thread[maxThreadNum];
 
-            thread1.Start(pocket);
-            thread2.Start(pocket);
-            thread3.Start(pocket);
-            thread4.Start(pocket);
+            
+            for (int i = 1; i <= maxThreadNum; i++)
+            {
+                Thread thread = new Thread(SBoom);
+                thread.Name = i.ToString();
+                threads[i - 1] = thread;
+            }
 
-            thread1.Join();
-            thread2.Join();
-            thread3.Join();
-            thread4.Join();
-            //Console.WriteLine(pocket.variable);
+            foreach (var thread in threads)
+            {
+                thread.Start(pocket);
+            }
+
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+            //Console.ReadLine();
         }
+
         public static void SBoom(object obj)
         {
             Pocket pocket = obj as Pocket;
+
             while (pocket.variable < 200)
             {
-                //Interlocked.Increment(ref variable);
                 lock (lockObj)
                 {
                     if (pocket.variable < 200)
                     {
-                        pocket.variable++;
-                        //Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} is incrementing the variable.");
-                        //Console.WriteLine(variable);
-                        if (pocket.variable % 7 == 0 || pocket.variable.ToString().Contains("7"))
+                        int threadNum = Int32.Parse(Thread.CurrentThread.Name);
+                        if (pocket.variable % maxThreadNum + 1 == threadNum)
                         {
-                            Console.WriteLine("Boom");
-                        }
-                        else
-                        {
-                            Console.WriteLine(pocket.variable);
+                            pocket.variable++;
+                            //Console.WriteLine($"Thread {Thread.CurrentThread.Name} is incrementing the variable.");
+                            if (pocket.variable % 7 == 0 || pocket.variable.ToString().Contains("7"))
+                            {
+                                Console.WriteLine("Boom");
+                            }
+                            else
+                            {
+                                Console.WriteLine(pocket.variable);
+                            }
                         }
                     }
-                    
                 }
-                
             }
         }
-        
+
         public class Pocket
         {
             public int variable = 0;

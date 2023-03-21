@@ -2,6 +2,5 @@
 Console.WriteLine("Hello, World!");
 
 Basic.SevenBoom.SevenBoomFourThreads();
-
-
+//ThreadPoolEx.SevenBoomPool.SevenBoomPoolMethod();
 Console.ReadLine();
