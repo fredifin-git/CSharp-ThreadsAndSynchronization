@@ -6,31 +6,35 @@ namespace ThreadPoolEx
     public class SevenBoomPool
     {
         static Pocket pocket = new Pocket();
-        //static readonly object lockObj = new object();
+        static readonly object lockObj = new object();
+        private const int maxThreadNum = 4;
         public static void SevenBoomPoolMethod()
         {
             ThreadPool.SetMaxThreads(4, 1);
-            string str = "Hello!";
-            
-            ThreadPool.QueueUserWorkItem(new WaitCallback((obj) => {SBoom(obj); }), new Pocket());
-            ThreadPool.QueueUserWorkItem(new WaitCallback((obj) => {SBoom(obj); }), new Pocket());
-            ThreadPool.QueueUserWorkItem(new WaitCallback((obj) => {SBoom(obj); }), new Pocket());
-            ThreadPool.QueueUserWorkItem(new WaitCallback((obj) => {SBoom(obj); }), new Pocket());
-            //Console.WriteLine(pocket.variable);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(SBoom), 1);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(SBoom), 2);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(SBoom), 3);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(SBoom), 4);
+           
         }
-
-        public static void SBoom(object obj)
+        
+        public static void SBoom(object threadNum)
         {
-            Pocket pocket = obj as Pocket;
+            //Pocket pocket = obj as Pocket;
             while (pocket.variable < 200)
             {
                 //Interlocked.Increment(ref variable);
                 lock (pocket)
                 {
-                    Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} is incrementing the variable.");
-                    if (pocket.variable < 200)
+                    if (pocket.variable >= 200)
                     {
-                        pocket.variable++;                        
+                        break;
+                    }
+                    if (pocket.variable % maxThreadNum + 1 == (int)threadNum)
+                    {
+                        pocket.variable++;
+                        //Console.WriteLine($"Thread {Thread.CurrentThread.Name} is incrementing the variable.");
+                        //Console.WriteLine($"Thread: {(int)threadNum}");
                         if (pocket.variable % 7 == 0 || pocket.variable.ToString().Contains("7"))
                         {
                             Console.WriteLine("Boom");
@@ -40,13 +44,10 @@ namespace ThreadPoolEx
                             Console.WriteLine(pocket.variable);
                         }
                     }
-
-                    //Thread.Sleep(500);
                 }
             }
 
         }
-
         public class Pocket
         {
             public int variable = 0;

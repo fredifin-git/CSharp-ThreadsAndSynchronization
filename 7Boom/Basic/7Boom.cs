@@ -29,7 +29,6 @@ namespace Basic
             {
                 thread.Join();
             }
-            //Console.ReadLine();
         }
 
         public static void SBoom(object obj)
